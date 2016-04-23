@@ -1,4 +1,4 @@
-Apache Log Scanner README
+# Apache Log Scanner
 
 Submitted a runnable jar (for simple command line running of the program, compiled 
 with java version 1.7.0_45) and an archived jar to allow viewing of the 
@@ -40,16 +40,16 @@ java -jar apache_scanner_runnable.jar access_log.txt
 Output:
 
 APACHE ACCESS LOG STATS
-=======================
-Earliest Request: Jul 2, 1996 at 11:51:31
-Latest Request: Dec 4, 1996 at 11:56:31
-Number of Get Requests: 11496
-Number of Put Requests: 0
-Number of Post Requests: 194
-Number of Head Requests: 14
-Number of Unknown Request Type: 5
+
+Earliest Request: Jul 2, 1996 at 11:51:31  
+Latest Request: Dec 4, 1996 at 11:56:31  
+Number of Get Requests: 11496  
+Number of Put Requests: 0  
+Number of Post Requests: 194  
+Number of Head Requests: 14  
+Number of Unknown Request Type: 5  
 
 For NCSA Combined Format logs
-Number of Mozilla Based Browser Requests: 9751
-Number of Internet Explorer Based Browser Requests: 72
-Number of Other Browser Based Requests: 1886
+Number of Mozilla Based Browser Requests: 9751  
+Number of Internet Explorer Based Browser Requests: 72  
+Number of Other Browser Based Requests: 1886  
