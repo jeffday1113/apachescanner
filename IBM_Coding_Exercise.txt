@@ -1,0 +1,54 @@
+Subject: Software Developer position - IBM - coding exercise
+
+Dear Candidate,
+
+Thank you for speaking with us during your initial phone screen.
+
+The next part of our candidate evaluation process is a coding exercise that we would like you to complete and return to us prior to your next interview. We will review and discuss your code with you as a team at that time.
+
+Software development at IBM requires a strong understanding of computer systems and Java coding, but also the ability to code for and interact with very large and complex software ecosystems.
+These ecosystems can include IT infrastructure, open source technologies, IBM technologies, industry-standard technologies, proprietary technologies, server systems, web client systems, et cetera. While a realistic coding exercise for this type of environment is beyond the scope of a hiring exercise, we have provided a simplified exercise here (along with optional exercises should you happen to have the background and time to complete them.)
+
+=======================================================================================================================
+[REQUIRED] 
+
+Write a small program in Java that scans the attached Apache access_log and displays: 
+
+   a) The dates and times of the earliest and latest requests in the log file 
+   b) The number of times each request method (GET, PUT, POST, etc.) was used 
+   c) If the log is in NCSA Combined format (vs. NCSA Common), how many requests came from: 
+      i) Mozilla-based browsers 
+      ii) Internet Explorer 
+      iii) Other browsers 
+   d) A README.TXT file with instructions on how to run the program and example command lines.
+
+This can be as simple as a command line utility, and the output can be in whatever format you choose. Use the attached access_log for testing. 
+
+Good design, good coding, error handling, and comments are all appreciated.
+
+=======================================================================================================================
+[OPTIONAL]
+
+It you have extra time...
+
+Bonus Exercises: 
+
+The following bonus exercises are not expected or required for the next interview. They are provided as extra credit in case you happen to have the exact skills and time to complete them.
+
+ e) Provide support for a command-line argument that will output 10KB of the data to a user-friendly HTML file with embedded CSS. Show each type of request in a different color. [Easy]
+ f) Write a small Eclipse stand-alone application that will call the code used for parts A-D and will display 10KB of the data and results in separate Eclipse views. [Hard]
+ g) Parse 10KB of the data to a JSON file. Then in the generated HTML file from part D, add Dojo Toolkit JavaScript code to create a table, display the JSON data, and make it searchable via a text box. [Very Hard]
+
+None of these bonus exercises are mandatory.
+ 
+=======================================================================================================================
+ 
+Please respond with runnable Java source code and a sample of your output. If a runnable program cannot be written (e.g. because you do not currently have access to a development workstation), that's fine -- just send the code as complete as you can make it. 
+
+There is no hard time limit for the exercise, but it should be sent to us at least a day before your next scheduled interview. 2-4 days after receiving the exercise is preferable. 
+
+If you have any questions, please do not hesitate to email or call us. 
+
+Thank you,
+
+- The IBM Team

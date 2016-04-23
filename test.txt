@@ -1,0 +1,3 @@
+metheny.brainiac.com - - [02/Jul/1995:11:51:31 -0400] "GET / HTTP/1.0" 200 4129 "" "Mozilla/2.02 (X11; I; SunOS 4.1.3 sun4c)"
+metheny.brainiac.com - - [01/Jul/1996:11:51:34 -0400] "GET /catalog/images/stucco.jpg HTTP/1.0" 200 6356 "http://www.hindley.com/" "Mozilla/2.02 (X11; I; SunOS 4.1.3 sun4c)"
+metheny.brainiac.com - - [01/Jul/1997:11:51:30 -0400] "GET /catalog/images/bluetran.gif HTTP/1.0" 200 2226 "http://www.hindley.com/" "Mozilla/2.02 (X11; I; SunOS 4.1.3 sun4c)"
