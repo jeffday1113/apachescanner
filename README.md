@@ -10,7 +10,7 @@ java -jar apache_scanner_runnable.jar filename
 where filename represents the name of the apache logs that the user wishes to 
 search.  If for any reason the jar does not work, simply unarchive the non runnable 
 jar, change into the directory where the Java class files are stores, and run the 
-following in the command line of a unix machine:
+following in the command line of a Unix machine:
 
 java ApacheScanner filename
 
