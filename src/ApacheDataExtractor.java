@@ -86,17 +86,10 @@ public class ApacheDataExtractor {
 				continue;
 			}
 			currentDate = dtf.parseDateTime(dateAndTime);
-			//currentDate.setDateAndTimeString(dateAndTime);
 			if (currentDate.isBefore(earliestRequest))
 				earliestRequest = currentDate;
 			else if (currentDate.isAfter(latestRequest))
 				latestRequest = currentDate;
-//			if (isEarliest(currentDate)){
-//				earliestRequest.setDateAndTimeString(currentDate);
-//			}
-//			if (isLatest(currentDate)){
-//				latestRequest.setDateAndTimeString(currentDate);
-//			}
 		}
 	}
 	
@@ -164,61 +157,4 @@ public class ApacheDataExtractor {
 			unknownRequestCount++;
 
 	}
-
-//	private boolean isLatest(DateAndTime dat){
-//		if (dat.getYear()>latestRequest.getYear())
-//			return true;
-//		else if (dat.getYear()<latestRequest.getYear())
-//			return false;
-//		if (dat.getMonthNum()>latestRequest.getMonthNum())
-//			return true;
-//		else if (dat.getMonthNum()<latestRequest.getMonthNum())
-//			return false;
-//		if (dat.getDay()>latestRequest.getDay())
-//			return true;
-//		else if (dat.getDay()<latestRequest.getDay())
-//			return false;
-//		if (dat.getHourInt()>latestRequest.getHourInt())
-//			return true;
-//		else if (dat.getHourInt()<latestRequest.getHourInt())
-//			return false;
-//		if (dat.getMinuteInt()>latestRequest.getMinuteInt())
-//			return true;
-//		else if (dat.getMinuteInt()<latestRequest.getMinuteInt())
-//			return false;
-//		if (dat.getSecondInt()>latestRequest.getSecondInt())
-//			return true;
-//		else if (dat.getSecondInt()<latestRequest.getSecondInt())
-//			return false;
-//		return false;
-//	}
-//
-//	private boolean isEarliest(DateAndTime dat){
-//		if (dat.getYear()<earliestRequest.getYear())
-//			return true;
-//		else if (dat.getYear()>earliestRequest.getYear())
-//			return false;
-//		if (dat.getMonthNum()<earliestRequest.getMonthNum())
-//			return true;
-//		else if (dat.getMonthNum()>earliestRequest.getMonthNum())
-//			return false;
-//		if (dat.getDay()<earliestRequest.getDay())
-//			return true;
-//		else if (dat.getDay()>earliestRequest.getDay())
-//			return false;
-//		if (dat.getHourInt()<earliestRequest.getHourInt())
-//			return true;
-//		else if (dat.getHourInt()>earliestRequest.getHourInt())
-//			return false;
-//		if (dat.getMinuteInt()<earliestRequest.getMinuteInt())
-//			return true;
-//		else if (dat.getMinuteInt()>earliestRequest.getMinuteInt())
-//			return false;
-//		if (dat.getSecondInt()<earliestRequest.getSecondInt())
-//			return true;
-//		else if (dat.getSecondInt()>earliestRequest.getSecondInt())
-//			return false;
-//		return false;
-//	}
-
 }
