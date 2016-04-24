@@ -12,6 +12,10 @@ public class ApacheDataExtractor {
 	/*Extractor fields that represent data to output*/
 	private static final String dateFormat = "dd/MMM/yyyy:HH:mm:ss Z";
 	private static final String monthOutputFormat = "MMM";
+	private static final String quoteRegex = "\"";
+	private static final String dateRegex = "\\[(.*?)\\]";
+	private static final String requestRegex = "\\\"(.*?)\\/";
+	private static final String browserRegex = "\\\" \"(.*?)\\\"$";
 	private DateTime earliestRequest;
 	private DateTime latestRequest;
 	private File accessFile;
@@ -49,13 +53,13 @@ public class ApacheDataExtractor {
 		String currentLine;
 		DateTime currentDate;
 		DateTimeFormatter dtf = DateTimeFormat.forPattern(dateFormat);
-		
+
 		/*Create pattern objects to find date, request type, and associated
 		 * browser of each apache access log*/
-		Pattern dateAndTimePattern = Pattern.compile("\\[(.*?)\\]");
-		Pattern requestPattern = Pattern.compile("\\\"(.*?)\\/");
-		Pattern browserPattern = Pattern.compile("\\\" \"(.*?)\\\"$");
-		
+		Pattern dateAndTimePattern = Pattern.compile(dateRegex);
+		Pattern requestPattern = Pattern.compile(requestRegex);
+		Pattern browserPattern = Pattern.compile(browserRegex);
+
 		Matcher datMatcher, requestMatcher, browserMatcher = null;
 		while (scan.hasNextLine()){
 			currentLine = scan.nextLine();
@@ -63,15 +67,15 @@ public class ApacheDataExtractor {
 			datMatcher = dateAndTimePattern.matcher(currentLine);
 			requestMatcher = requestPattern.matcher(currentLine);
 			browserMatcher = browserPattern.matcher(currentLine);
-			
+
 			/*Find Request type of access log and edit global data */
 			extractAndEditRequestStats(currentLine, requestMatcher);
-			
+
 			/*Find browser type of access log if it is a combined format 
 			 * and edit global data*/
-			if (currentLine.endsWith("\""))
+			if (currentLine.endsWith(quoteRegex))
 				extractAndEditBrowserStats(currentLine, browserMatcher);
-			
+
 			/*Extract date of access log, update currentDate object, and
 			 * see if it is the earliest or latest log seen
 			 * 
@@ -80,19 +84,21 @@ public class ApacheDataExtractor {
 			 * last one is most recent.  However wanted to make my program 
 			 * handle the case where logs are for some reason out of order*/
 			String dateAndTime = extractDateAndTime(currentLine, datMatcher);
-			if (earliestRequest == null && latestRequest==null){
-				earliestRequest=dtf.parseDateTime(dateAndTime);
-				latestRequest=dtf.parseDateTime(dateAndTime);
-				continue;
+			if (dateAndTime != null){
+				if (earliestRequest == null && latestRequest==null){
+					earliestRequest=dtf.parseDateTime(dateAndTime);
+					latestRequest=dtf.parseDateTime(dateAndTime);
+					continue;
+				}
+				currentDate = dtf.parseDateTime(dateAndTime);
+				if (currentDate.isBefore(earliestRequest))
+					earliestRequest = currentDate;
+				else if (currentDate.isAfter(latestRequest))
+					latestRequest = currentDate;
 			}
-			currentDate = dtf.parseDateTime(dateAndTime);
-			if (currentDate.isBefore(earliestRequest))
-				earliestRequest = currentDate;
-			else if (currentDate.isAfter(latestRequest))
-				latestRequest = currentDate;
 		}
 	}
-	
+
 	public void outputStats(){
 		System.out.println("\nAPACHE ACCESS LOG STATS");
 		System.out.println("=======================");
@@ -127,13 +133,11 @@ public class ApacheDataExtractor {
 	}
 
 	private String extractDateAndTime(String line, Matcher m){
-		String dateAndTime="";
+		String dateAndTime = null;
 		if (m.find()){
 			String current_string=m.group(1);
-			CharSequence dateIdentifiers = "/";
-			if (!current_string.contains(dateIdentifiers))
-				return "NO DATE IN LOG.  CHECK FOR ERRORS";
-			dateAndTime=current_string;
+			if (current_string.contains("/"))
+				dateAndTime=current_string;
 		}
 		return dateAndTime;
 	}
