@@ -9,13 +9,15 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 public class ApacheDataExtractor {
-	/*Extractor fields that represent data to output*/
+	/* Program Strings */
 	private static final String dateFormat = "dd/MMM/yyyy:HH:mm:ss Z";
 	private static final String monthOutputFormat = "MMM";
 	private static final String quoteRegex = "\"";
 	private static final String dateRegex = "\\[(.*?)\\]";
 	private static final String requestRegex = "\\\"(.*?)\\/";
 	private static final String browserRegex = "\\\" \"(.*?)\\\"$";
+	
+	/* Extractor fields that represent data to output */
 	private DateTime earliestRequest;
 	private DateTime latestRequest;
 	private File accessFile;
@@ -47,15 +49,14 @@ public class ApacheDataExtractor {
 		try {
 			scan = new Scanner(accessFile);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("FILE NOT FOUND.  MAKE SURE IN CORRECT DIRECTORY!");
+			System.exit(0);
 		}
 		String currentLine;
 		DateTime currentDate;
 		DateTimeFormatter dtf = DateTimeFormat.forPattern(dateFormat);
 
-		/*Create pattern objects to find date, request type, and associated
-		 * browser of each apache access log*/
+		/* Create pattern objects to find date, request type, and associated browser of each apache access log */
 		Pattern dateAndTimePattern = Pattern.compile(dateRegex);
 		Pattern requestPattern = Pattern.compile(requestRegex);
 		Pattern browserPattern = Pattern.compile(browserRegex);
@@ -63,26 +64,24 @@ public class ApacheDataExtractor {
 		Matcher datMatcher, requestMatcher, browserMatcher = null;
 		while (scan.hasNextLine()){
 			currentLine = scan.nextLine();
-			/*Initialize matcher objects*/
+			
+			/* Initialize matcher objects */
 			datMatcher = dateAndTimePattern.matcher(currentLine);
 			requestMatcher = requestPattern.matcher(currentLine);
 			browserMatcher = browserPattern.matcher(currentLine);
 
-			/*Find Request type of access log and edit global data */
+			/* Find Request type of access log and edit global data */
 			extractAndEditRequestStats(currentLine, requestMatcher);
 
-			/*Find browser type of access log if it is a combined format 
-			 * and edit global data*/
+			/* Find browser type of access log if it is a combined format and edit global data */
 			if (currentLine.endsWith(quoteRegex))
 				extractAndEditBrowserStats(currentLine, browserMatcher);
 
-			/*Extract date of access log, update currentDate object, and
-			 * see if it is the earliest or latest log seen
+			/* Extract date of access log, update currentDate object, and see if it is the earliest or latest log seen
 			 * 
-			 * NOTE: Trivial solution to this is if log files are always in 
-			 * order by date and time then first one is earliest request and
-			 * last one is most recent.  However wanted to make my program 
-			 * handle the case where logs are for some reason out of order*/
+			 * NOTE: Trivial solution to this is if log files are always in order by date and time then first one is 
+			 * earliest request and last one is most recent.  However wanted to make my program handle the case where 
+			 * logs are for some reason out of order. */
 			String dateAndTime = extractDateAndTime(currentLine, datMatcher);
 			if (dateAndTime != null){
 				if (earliestRequest == null && latestRequest==null){
@@ -93,7 +92,7 @@ public class ApacheDataExtractor {
 				currentDate = dtf.parseDateTime(dateAndTime);
 				if (currentDate.isBefore(earliestRequest))
 					earliestRequest = currentDate;
-				else if (currentDate.isAfter(latestRequest))
+				if (currentDate.isAfter(latestRequest))
 					latestRequest = currentDate;
 			}
 		}
@@ -109,7 +108,8 @@ public class ApacheDataExtractor {
 		System.out.println("Number of Post Requests: " + postRequestCount);
 		System.out.println("Number of Head Requests: " + headRequestCount);
 		System.out.println("Number of Unknown Request Type: " + unknownRequestCount);
-		System.out.println("\nFor NCSA Combined Format logs\nNumber of Mozilla Based Browser Requests: " + mozillaRequestCount);
+		System.out.println("\nFor NCSA Combined Format logs\nNumber of Mozilla Based Browser Requests: " + 
+							mozillaRequestCount);
 		System.out.println("Number of Internet Explorer Based Browser Requests: " + ieRequestCount);
 		System.out.println("Number of Other Browser Based Requests: " + otherBrowserRequestCount);
 	}
@@ -120,9 +120,8 @@ public class ApacheDataExtractor {
 	}
 
 	private void extractAndEditBrowserStats(String line, Matcher m){
-		String browser="";
 		if (m.find()){
-			browser=m.group(1).toLowerCase();
+			String browser=m.group(1).toLowerCase();
 			if (browser.contains("mozilla"))
 				mozillaRequestCount++;
 			else if (browser.contains("internet explorer"))
@@ -143,9 +142,8 @@ public class ApacheDataExtractor {
 	}
 
 	private void extractAndEditRequestStats(String line, Matcher m){
-		String request="";
 		if (m.find()){
-			request=m.group(1);
+			String request=m.group(1);
 			if (request.contains("GET"))
 				getRequestCount++;
 			else if (request.contains("POST"))
