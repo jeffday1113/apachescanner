@@ -1,0 +1,14 @@
+APACHE ACCESS LOG STATS
+=======================
+Earliest Request: Jul 2, 1995 at 11:51:31
+Latest Request: Jul 1, 1997 at 11:51:30
+Number of Get Requests: 3
+Number of Put Requests: 0
+Number of Post Requests: 0
+Number of Head Requests: 0
+Number of Unknown Request Type: 0
+
+For NCSA Combined Format logs
+Number of Mozilla Based Browser Requests: 3
+Number of Internet Explorer Based Browser Requests: 0
+Number of Other Browser Based Requests: 0

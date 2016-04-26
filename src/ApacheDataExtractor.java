@@ -1,5 +1,9 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +20,7 @@ public class ApacheDataExtractor {
 	private static final String dateRegex = "\\[(.*?)\\]";
 	private static final String requestRegex = "\\\"(.*?)\\/";
 	private static final String browserRegex = "\\\" \"(.*?)\\\"$";
-	
+
 	/* Extractor fields that represent data to output */
 	private DateTime earliestRequest;
 	private DateTime latestRequest;
@@ -31,17 +35,17 @@ public class ApacheDataExtractor {
 	private int otherBrowserRequestCount;
 
 	public ApacheDataExtractor(File logFile){
-		accessFile=logFile;
-		earliestRequest=null;
-		latestRequest=null;
-		getRequestCount=0;
-		putRequestCount=0;
-		postRequestCount=0;
-		headRequestCount=0;
-		unknownRequestCount=0;
-		mozillaRequestCount=0;
-		ieRequestCount=0;
-		otherBrowserRequestCount=0;
+		accessFile = logFile;
+		earliestRequest = null;
+		latestRequest = null;
+		getRequestCount = 0;
+		putRequestCount = 0;
+		postRequestCount = 0;
+		headRequestCount = 0;
+		unknownRequestCount = 0;
+		mozillaRequestCount = 0;
+		ieRequestCount = 0;
+		otherBrowserRequestCount = 0;
 	}
 
 	public void scanFile(){
@@ -52,6 +56,8 @@ public class ApacheDataExtractor {
 			System.out.println("FILE NOT FOUND.  MAKE SURE IN CORRECT DIRECTORY!");
 			System.exit(0);
 		}
+
+		/* Declare variables to be used */
 		String currentLine;
 		DateTime currentDate;
 		DateTimeFormatter dtf = DateTimeFormat.forPattern(dateFormat);
@@ -60,11 +66,10 @@ public class ApacheDataExtractor {
 		Pattern dateAndTimePattern = Pattern.compile(dateRegex);
 		Pattern requestPattern = Pattern.compile(requestRegex);
 		Pattern browserPattern = Pattern.compile(browserRegex);
-
 		Matcher datMatcher, requestMatcher, browserMatcher = null;
 		while (scan.hasNextLine()){
 			currentLine = scan.nextLine();
-			
+
 			/* Initialize matcher objects */
 			datMatcher = dateAndTimePattern.matcher(currentLine);
 			requestMatcher = requestPattern.matcher(currentLine);
@@ -98,7 +103,7 @@ public class ApacheDataExtractor {
 		}
 	}
 
-	public void outputStats(){
+	public void outputStatsToCommandLine(){
 		System.out.println("\nAPACHE ACCESS LOG STATS");
 		System.out.println("=======================");
 		System.out.println("Earliest Request: " + buildDateOutputString(earliestRequest));
@@ -109,9 +114,56 @@ public class ApacheDataExtractor {
 		System.out.println("Number of Head Requests: " + headRequestCount);
 		System.out.println("Number of Unknown Request Type: " + unknownRequestCount);
 		System.out.println("\nFor NCSA Combined Format logs\nNumber of Mozilla Based Browser Requests: " + 
-							mozillaRequestCount);
+				mozillaRequestCount);
 		System.out.println("Number of Internet Explorer Based Browser Requests: " + ieRequestCount);
 		System.out.println("Number of Other Browser Based Requests: " + otherBrowserRequestCount);
+	}
+
+	public void outputStatsToFile(String fileName){
+		File statText = new File(fileName);
+		FileOutputStream is;
+		try {
+			is = new FileOutputStream(statText);
+			OutputStreamWriter osw = new OutputStreamWriter(is);    
+			BufferedWriter w = new BufferedWriter(osw);
+			writeLineAndNewLine(w, "APACHE ACCESS LOG STATS");
+			writeLineAndNewLine(w, "=======================");
+			writeLineAndNewLine(w, "Earliest Request: " + buildDateOutputString(earliestRequest));
+			writeLineAndNewLine(w, "Latest Request: " + buildDateOutputString(latestRequest));
+			writeLineAndNewLine(w, "Number of Get Requests: " + getRequestCount);
+			writeLineAndNewLine(w, "Number of Put Requests: " + putRequestCount);
+			writeLineAndNewLine(w, "Number of Post Requests: " + postRequestCount);
+			writeLineAndNewLine(w, "Number of Head Requests: " + headRequestCount);
+			writeLineAndNewLine(w, "Number of Unknown Request Type: " + unknownRequestCount);
+			writeLineAndNewLine(w, "\nFor NCSA Combined Format logs\nNumber of Mozilla Based Browser Requests: " + mozillaRequestCount);
+			writeLineAndNewLine(w, "Number of Internet Explorer Based Browser Requests: " + ieRequestCount);
+			writeLineAndNewLine(w, "Number of Other Browser Based Requests: " + otherBrowserRequestCount);
+			w.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setLogFile(File logFile){
+		this.accessFile = logFile;
+	}
+	
+	public void resetStats(){
+		earliestRequest = null;
+		latestRequest = null;
+		getRequestCount = 0;
+		putRequestCount = 0;
+		postRequestCount = 0;
+		headRequestCount = 0;
+		unknownRequestCount = 0;
+		mozillaRequestCount = 0;
+		ieRequestCount = 0;
+		otherBrowserRequestCount = 0;
+	}
+	
+	private void writeLineAndNewLine(BufferedWriter bw, String line) throws IOException{
+		bw.write(line);
+		bw.newLine();
 	}
 
 	private String buildDateOutputString(DateTime date){

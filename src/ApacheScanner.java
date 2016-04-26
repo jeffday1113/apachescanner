@@ -15,7 +15,7 @@ public class ApacheScanner {
 		if (apacheLog.exists()){
 			ApacheDataExtractor dataExtractor = new ApacheDataExtractor(apacheLog);
 			dataExtractor.scanFile();
-			dataExtractor.outputStats();
+			dataExtractor.outputStatsToFile("jeff.txt");
 		}
 		
 		/* If file not in current directory, let user know and exit program */
