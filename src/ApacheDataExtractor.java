@@ -47,6 +47,63 @@ public class ApacheDataExtractor {
 		ieRequestCount = 0;
 		otherBrowserRequestCount = 0;
 	}
+	
+	public DateTime getEarliestRequest(){
+		return earliestRequest;
+	}
+	
+	public DateTime getLatestRequest(){
+		return latestRequest;
+	}
+	
+	public int getGetRequestCount(){
+		return getRequestCount;
+	}
+	
+	public int getPutRequestCount(){
+		return putRequestCount;
+	}
+	
+	public int getPostRequestCount(){
+		return postRequestCount;
+	}
+	
+	public int getHeadRequestCount(){
+		return headRequestCount;
+	}
+	
+	public int getUnknownRequestCount(){
+		return unknownRequestCount;
+	}
+	
+	public int getMozillaRequestCount(){
+		return mozillaRequestCount;
+	}
+	
+	public int getIeRequestCount(){
+		return ieRequestCount;
+	}
+	
+	public int getOtherBrowserRequestCount(){
+		return otherBrowserRequestCount;
+	}
+	
+	public void setLogFile(File logFile){
+		this.accessFile = logFile;
+	}
+
+	public void resetStats(){
+		earliestRequest = null;
+		latestRequest = null;
+		getRequestCount = 0;
+		putRequestCount = 0;
+		postRequestCount = 0;
+		headRequestCount = 0;
+		unknownRequestCount = 0;
+		mozillaRequestCount = 0;
+		ieRequestCount = 0;
+		otherBrowserRequestCount = 0;
+	}
 
 	public void scanFile(){
 		Scanner scan = null;
@@ -89,16 +146,18 @@ public class ApacheDataExtractor {
 			 * logs are for some reason out of order. */
 			String dateAndTime = extractDateAndTime(currentLine, datMatcher);
 			if (dateAndTime != null){
-				if (earliestRequest == null && latestRequest==null){
+				if (earliestRequest == null && latestRequest == null){
 					earliestRequest=dtf.parseDateTime(dateAndTime);
 					latestRequest=dtf.parseDateTime(dateAndTime);
 					continue;
 				}
-				currentDate = dtf.parseDateTime(dateAndTime);
-				if (currentDate.isBefore(earliestRequest))
-					earliestRequest = currentDate;
-				if (currentDate.isAfter(latestRequest))
-					latestRequest = currentDate;
+				else{
+					currentDate = dtf.parseDateTime(dateAndTime);
+					if (currentDate.isBefore(earliestRequest))
+						earliestRequest = currentDate;
+					if (currentDate.isAfter(latestRequest))
+						latestRequest = currentDate;
+				}
 			}
 		}
 	}
@@ -140,27 +199,11 @@ public class ApacheDataExtractor {
 			writeLineAndNewLine(w, "Number of Other Browser Based Requests: " + otherBrowserRequestCount);
 			w.close();
 		} catch (IOException e) {
+			System.out.println("Problem writing stats to file! See stack trace for details");
 			e.printStackTrace();
 		}
 	}
 
-	public void setLogFile(File logFile){
-		this.accessFile = logFile;
-	}
-	
-	public void resetStats(){
-		earliestRequest = null;
-		latestRequest = null;
-		getRequestCount = 0;
-		putRequestCount = 0;
-		postRequestCount = 0;
-		headRequestCount = 0;
-		unknownRequestCount = 0;
-		mozillaRequestCount = 0;
-		ieRequestCount = 0;
-		otherBrowserRequestCount = 0;
-	}
-	
 	private void writeLineAndNewLine(BufferedWriter bw, String line) throws IOException{
 		bw.write(line);
 		bw.newLine();
